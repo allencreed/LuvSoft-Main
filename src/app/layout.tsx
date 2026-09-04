@@ -19,6 +19,8 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 });
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Love Soft Life",
   description: "Premium physical goods",

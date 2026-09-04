@@ -1,5 +1,6 @@
+import "dotenv/config";
 import { Auth0Client } from "@auth0/nextjs-auth0/server";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 
 async function main() {
@@ -14,7 +15,6 @@ async function main() {
   const session = await auth0.getSession();
   if (!session?.user) {
     console.log("No session found. Log in to the app first.");
-    await import("dotenv/config").catch(() => {});
     console.log("env check:", process.env.AUTH0_DOMAIN);
     return;
   }
@@ -24,7 +24,7 @@ async function main() {
   console.log("Session user:", session.user.email);
 
   const db = new PrismaClient({
-    adapter: new PrismaBetterSqlite3({ url: "file:./dev.db" }),
+    adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
   });
 
   const existing = await db.user.findUnique({ where: { auth0Id } });
@@ -35,7 +35,7 @@ async function main() {
     await db.user.create({
       data: {
         auth0Id,
-        email: session.user.email,
+        email: session.user.email!,
         name: session.user.name ?? null,
         role: "admin",
       },

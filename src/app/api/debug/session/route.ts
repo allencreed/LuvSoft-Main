@@ -15,7 +15,7 @@ export async function GET() {
     user = await db.user.create({
       data: {
         auth0Id,
-        email: session.user.email,
+        email: session.user.email!,
         name: session.user.name ?? null,
         role: "admin",
       },
