@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "rounded-full bg-primary text-primary-foreground hover:brightness-110 focus-visible:outline-2 focus-visible:outline-[#0071e3] px-[22px] py-[11px]",
+          "rounded-full bg-primary text-primary-foreground hover:bg-primary-focus focus-visible:outline-2 focus-visible:outline-[#96763f] px-[22px] py-[11px]",
         outline:
           "rounded-full border-primary bg-transparent text-primary hover:bg-primary/5 px-[22px] py-[11px]",
         secondary:
@@ -17,7 +17,7 @@ const buttonVariants = cva(
         ghost:
           "text-primary bg-transparent hover:underline px-0 py-0 border-0 rounded-none",
         destructive:
-          "rounded-full bg-[#ff3b30] text-white hover:brightness-110 px-[22px] py-[11px]",
+          "rounded-full bg-destructive text-white hover:brightness-110 px-[22px] py-[11px]",
         link: "text-primary underline-offset-4 hover:underline px-0 py-0 border-0 rounded-none",
       },
       size: {

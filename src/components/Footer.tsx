@@ -4,34 +4,27 @@ const columns = [
   {
     heading: "Shop",
     links: [
-      { label: "Products", href: "/products" },
+      { label: "The Collection", href: "/products" },
+      { label: "Apparel", href: "/products?category=apparel" },
       { label: "Home", href: "/products?category=home" },
       { label: "Self Care", href: "/products?category=self-care" },
       { label: "Accessories", href: "/products?category=accessories" },
-      { label: "Travel", href: "/products?category=travel" },
       { label: "Gifts", href: "/products?category=gifts" },
-    ],
-  },
-  {
-    heading: "Support",
-    links: [
-      { label: "Contact Us", href: "/contact" },
-      { label: "Shipping Info", href: "/shipping" },
-      { label: "Returns & Exchanges", href: "/returns" },
-      { label: "FAQ", href: "/faq" },
-      { label: "Size Guide", href: "/size-guide" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "About Us", href: "/about" },
       { label: "Our Story", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "FAQ", href: "/faq" },
     ],
   },
   {
-    heading: "Legal",
+    heading: "Care",
     links: [
+      { label: "Shipping", href: "/shipping" },
+      { label: "Returns & Exchanges", href: "/returns" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
     ],
@@ -40,21 +33,29 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="bg-canvas-parchment">
-      <div className="mx-auto px-6 py-16" style={{ maxWidth: 980 }}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-surface-black text-white">
+      <div className="mx-auto w-full px-6 sm:px-8" style={{ maxWidth: 1200 }}>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" className="font-display text-[20px] font-medium tracking-[0.26em] text-white uppercase">
+              Love Soft Life
+            </Link>
+            <p className="mt-4 max-w-[26ch] text-[15px] leading-relaxed text-white/55">
+              Quietly luxurious essentials for a softer, slower everyday — made to be kept, not replaced.
+            </p>
+          </div>
+
+          {/* Link columns */}
           {columns.map((col) => (
             <div key={col.heading}>
-              <h4 className="text-sm font-normal text-ink" style={{ fontSize: 14 }}>
-                {col.heading}
-              </h4>
-              <ul className="mt-3 space-y-1">
+              <h4 className="text-[11px] font-medium uppercase tracking-[0.22em] text-body-muted">{col.heading}</h4>
+              <ul className="mt-5 space-y-3">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-ink-muted-48 transition-colors hover:text-ink"
-                      style={{ fontSize: 17, lineHeight: "2.41" }}
+                      className="text-[15px] text-white/70 transition-colors hover:text-white"
                     >
                       {link.label}
                     </Link>
@@ -64,10 +65,15 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <hr className="my-8 border-hairline" />
-        <p className="text-ink-muted-48" style={{ fontSize: 12 }}>
-          &copy; 2026 Love Soft Life. All rights reserved.
-        </p>
+
+        <div className="flex flex-col items-start justify-between gap-3 border-t border-white/10 py-7 sm:flex-row sm:items-center">
+          <p className="text-[12px] tracking-[0.06em] text-white/40">
+            © 2026 Love Soft Life — all rights reserved
+          </p>
+          <p className="font-display text-[15px] italic text-white/40">
+            Comfort, considered.
+          </p>
+        </div>
       </div>
     </footer>
   );

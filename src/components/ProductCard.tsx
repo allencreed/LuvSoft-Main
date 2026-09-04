@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
 
 type Product = {
@@ -14,46 +13,55 @@ type Product = {
 };
 
 export function ProductCard({ product }: { product: Product }) {
+  const inStock = product.inventory > 0;
+
   return (
-    <Card>
-      <Link href={`/products/${product.slug}`} className="relative block">
-        <div className="aspect-square bg-muted">
-          {product.images && (
-            <img
-              src={product.images}
-              alt={product.name}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-          )}
-          {product.featured && product.inventory > 0 && (
-            <span className="absolute top-2 left-2 inline-flex items-center rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold text-white">
-              Featured
-            </span>
-          )}
+    <article className="group flex flex-col">
+      <Link
+        href={`/products/${product.slug}`}
+        className="relative block aspect-square overflow-hidden bg-surface-pearl"
+        aria-label={product.name}
+      >
+        {product.images ? (
+          <img
+            src={product.images}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="font-display text-[44px] italic text-hairline">{product.category.name.slice(0, 1)}</span>
+          </div>
+        )}
+
+        {/* Hover CTA */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden justify-center pb-5 opacity-0 transition-all duration-300 group-hover:opacity-100 md:flex">
+          <span
+            className={`inline-flex items-center justify-center rounded-full px-7 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] ${
+              inStock
+                ? "bg-primary-foreground/95 text-ink shadow-[0_2px_16px_rgba(0,0,0,0.18)] backdrop-blur-sm"
+                : "bg-black/60 text-white/80 backdrop-blur-sm"
+            }`}
+          >
+            {inStock ? "View Piece" : "Out of Stock"}
+          </span>
         </div>
       </Link>
-      <CardContent className="pt-4 pb-3 px-5">
-        <p className="text-xs text-muted-foreground uppercase tracking-wide">{product.category.name}</p>
+
+      <div className="flex flex-col pt-5 text-left">
+        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-ink-muted-48">
+          {product.category.name}
+        </p>
         <Link href={`/products/${product.slug}`}>
-          <h3 className="mt-0.5 text-[17px] font-normal leading-tight text-ink">{product.name}</h3>
+          <h3 className="mt-2 font-display text-[22px] leading-[1.15] text-ink transition-colors group-hover:text-gold-deep">
+            {product.name}
+          </h3>
         </Link>
-        <p className="mt-1 text-[17px] text-ink">{formatPrice(product.priceCents)}</p>
-      </CardContent>
-      <div className="px-5 pb-4">
-        {product.inventory > 0 ? (
-          <Link
-            href={`/products/${product.slug}`}
-            className="inline-flex w-full items-center justify-center rounded-full bg-primary px-[22px] py-[11px] text-sm text-primary-foreground hover:brightness-110 active:scale-[0.96] transition-all"
-          >
-            View Details
-          </Link>
-        ) : (
-          <span className="inline-flex w-full items-center justify-center rounded-full bg-muted px-[22px] py-[11px] text-sm text-muted-foreground cursor-not-allowed">
-            Out of Stock
-          </span>
-        )}
+        <p className="mt-1.5 text-[15px] tracking-[0.01em] text-ink-muted-80">
+          {formatPrice(product.priceCents)}
+        </p>
       </div>
-    </Card>
+    </article>
   );
 }
