@@ -10,6 +10,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
     { url: "https://lovesoftlife.com", lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
     { url: "https://lovesoftlife.com/products", lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: "https://lovesoftlife.com/search", lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
+    { url: "https://lovesoftlife.com/gift-cards", lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
+    { url: "https://lovesoftlife.com/size-guide", lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: "https://lovesoftlife.com/care-guide", lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: "https://lovesoftlife.com/accessibility", lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
     ...products.map((p) => ({
       url: `https://lovesoftlife.com/products/${p.slug}`,
       lastModified: p.createdAt,

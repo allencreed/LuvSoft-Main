@@ -25,6 +25,10 @@ const columns = [
     links: [
       { label: "Shipping", href: "/shipping" },
       { label: "Returns & Exchanges", href: "/returns" },
+      { label: "Size Guide", href: "/size-guide" },
+      { label: "Care Guide", href: "/care-guide" },
+      { label: "Gift Cards", href: "/gift-cards" },
+      { label: "Accessibility", href: "/accessibility" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
     ],

@@ -47,6 +47,9 @@ yarn-error.log*
 *.db
 *.db-journal
 
+# local portable postgres (never commit)
+.localdb/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
