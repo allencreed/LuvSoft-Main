@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { ProductCard } from "@/components/ProductCard";
+import { HeroSlides } from "@/components/HeroSlides";
 
 export const metadata: Metadata = {
   title: "Love Soft Life — Quiet Luxury Essentials",
@@ -58,45 +59,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative flex min-h-[88vh] items-center justify-center overflow-hidden bg-surface-black">
-        <img
-          src="/images/hero.png"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "center 30%" }}
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/60" />
-
-        <div className="relative z-10 mx-auto w-full px-6 py-28 text-center" style={{ maxWidth: 900 }}>
-          <p className="eyebrow text-white/75">
-            <span className="mr-4 inline-block h-px w-8 translate-y-[-3px] bg-gold align-middle" />
-            The Autumn Edit · 2026
-            <span className="ml-4 inline-block h-px w-8 translate-y-[-3px] bg-gold align-middle" />
-          </p>
-          <h1 className="mt-8 text-[54px] leading-[1.02] text-white sm:text-[76px] lg:text-[104px]">
-            Love Soft Life
-          </h1>
-          <p className="mx-auto mt-7 max-w-md text-[19px] font-light leading-[1.5] text-white/85 sm:text-[21px]">
-            Quietly luxurious essentials for a softer, slower everyday.
-          </p>
-          <div className="mt-11 flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
-            <Link
-              href="/products"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-primary-foreground px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-all hover:bg-white hover:shadow-[0_2px_24px_rgba(0,0,0,0.25)] active:scale-[0.97] sm:px-10 sm:text-[12px]"
-            >
-              Shop the Collection
-            </Link>
-            <Link
-              href="/about"
-              className="group inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.2em] text-white/90 transition-colors hover:text-white"
-            >
-              Our Story
-              <span className="block h-px w-6 bg-gold transition-all duration-300 group-hover:w-10" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSlides />
 
       {/* ── Promise strip ────────────────────────────────── */}
       <section className="border-b border-hairline bg-canvas-parchment">

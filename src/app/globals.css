@@ -164,3 +164,52 @@
 @utility display {
   font-family: var(--font-display);
 }
+
+/* ── Hero slideshow ─────────────────────────────────────── */
+/* Slow Ken Burns drift: ~1.05x scale over the full slide cycle */
+@keyframes kenburns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.07) translate3d(-0.6%, -0.9%, 0);
+  }
+}
+
+@utility animate-kenburns {
+  animation: kenburns 9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+/* Copy reveal per slide: soft upward drift + fade */
+@keyframes hero-copy-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility animate-hero-copy {
+  animation: hero-copy-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.35s;
+}
+
+/* Respect reduced motion: no zoom, no copy drift, instant cuts */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide img {
+    animation: none !important;
+    transform: none !important;
+  }
+  .animate-hero-copy {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .hero-slide {
+    transition-duration: 0.01ms !important;
+  }
+}
