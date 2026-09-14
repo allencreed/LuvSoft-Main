@@ -6,6 +6,9 @@ import { stripe } from "@/lib/stripe";
 import { fulfillStripeCheckout } from "@/lib/fulfillment";
 import { formatPrice } from "@/lib/utils";
 
+// Session-dependent: must render per-request, never prerendered.
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ paid?: string }>;

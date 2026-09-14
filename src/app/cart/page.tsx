@@ -5,6 +5,9 @@ import { formatPrice } from "@/lib/utils";
 import { CartCheckoutButton } from "@/components/CartCheckoutButton";
 import { CartItemRow } from "@/components/CartItemRow";
 
+// Session-dependent: must render per-request, never prerendered.
+export const dynamic = "force-dynamic";
+
 export default async function CartPage() {
   const session = await auth0.getSession();
   if (!session?.user) redirect("/auth/login?returnTo=%2Fcart");

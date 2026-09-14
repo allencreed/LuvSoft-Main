@@ -3,6 +3,9 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { formatPrice } from "@/lib/utils";
 
+// Session-dependent: must render per-request, never prerendered.
+export const dynamic = "force-dynamic";
+
 export default async function OrdersPage() {
   const user = await requireUser("/account/orders");
 
