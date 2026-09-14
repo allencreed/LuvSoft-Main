@@ -7,10 +7,10 @@ import { CartItemRow } from "@/components/CartItemRow";
 
 export default async function CartPage() {
   const session = await auth0.getSession();
-  if (!session?.user) redirect("/auth/login");
+  if (!session?.user) redirect("/auth/login?returnTo=%2Fcart");
 
   const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
-  if (!user) redirect("/auth/login");
+  if (!user) redirect("/auth/login?returnTo=%2Fcart");
 
   const cart = await db.cart.findUnique({
     where: { userId: user.id },

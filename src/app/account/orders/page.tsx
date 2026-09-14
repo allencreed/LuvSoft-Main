@@ -1,21 +1,16 @@
 import Link from "next/link";
-import { auth0 } from "@/lib/auth0";
 import { db } from "@/lib/db";
+import { requireUser } from "@/lib/session";
 import { formatPrice } from "@/lib/utils";
 
 export default async function OrdersPage() {
-  const session = await auth0.getSession();
-  const user = session?.user
-    ? await db.user.findUnique({ where: { auth0Id: session.user.sub } })
-    : null;
+  const user = await requireUser("/account/orders");
 
-  const orders = user
-    ? await db.order.findMany({
-        where: { userId: user.id },
-        include: { items: { include: { product: true } } },
-        orderBy: { createdAt: "desc" },
-      })
-    : [];
+  const orders = await db.order.findMany({
+    where: { userId: user.id },
+    include: { items: { include: { product: true } } },
+    orderBy: { createdAt: "desc" },
+  });
 
   const statusColors: Record<string, string> = {
     pending: "text-yellow-800 bg-yellow-50",

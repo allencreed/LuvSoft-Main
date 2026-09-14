@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { auth0 } from "@/lib/auth0";
 import { db } from "@/lib/db";
+import { requireUser } from "@/lib/session";
 import { stripe } from "@/lib/stripe";
 import { fulfillStripeCheckout } from "@/lib/fulfillment";
 import { formatPrice } from "@/lib/utils";
@@ -15,12 +15,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { paid } = await searchParams;
 
-  const session = await auth0.getSession();
-  const user = session?.user
-    ? await db.user.findUnique({ where: { auth0Id: session.user.sub } })
-    : null;
-
-  if (!user) notFound();
+  const user = await requireUser(`/account/orders/${id}`);
 
   let order = await db.order.findUnique({
     where: { id },
