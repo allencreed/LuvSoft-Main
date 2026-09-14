@@ -69,6 +69,8 @@ model Order {
   status          String     @default("pending")
   totalCents      Int
   stripeSessionId String?
+  stripePaymentIntent String?
+  paidAt          DateTime?
   shippingName    String
   shippingAddress String
   shippingCity    String

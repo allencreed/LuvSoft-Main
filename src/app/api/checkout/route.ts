@@ -21,12 +21,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
   }
 
+  const totalCents = cart.items.reduce(
+    (sum, item) => sum + item.priceCents * item.quantity,
+    0
+  );
+
   const order = await db.order.create({
     data: {
       orderNumber: `SO-${Date.now().toString(36).toUpperCase()}`,
       userId: user.id,
       status: "pending",
-      totalCents: cart.items.reduce((sum, item) => sum + item.priceCents * item.quantity, 0),
+      totalCents,
       shippingName: "",
       shippingAddress: "",
       shippingCity: "",
@@ -42,6 +47,8 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  const baseUrl = process.env.AUTH0_BASE_URL ?? new URL(req.url).origin;
+
   const stripeSession = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: cart.items.map((item) => ({
@@ -55,12 +62,20 @@ export async function POST(req: NextRequest) {
       },
       quantity: item.quantity,
     })),
+    // Collect the shipping address on Stripe's hosted page — it's required,
+    // and we persist it onto the order when the webhook confirms payment.
+    shipping_address_collection: {
+      allowed_countries: ["US", "CA", "GB", "AU"],
+    },
+    phone_number_collection: {
+      enabled: true,
+    },
     metadata: {
       orderId: order.id,
       userId: user.id,
     },
-    success_url: `${process.env.AUTH0_BASE_URL}/account/orders?success=1`,
-    cancel_url: `${process.env.AUTH0_BASE_URL}/cart`,
+    success_url: `${baseUrl}/account/orders/${order.id}?paid=1`,
+    cancel_url: `${baseUrl}/cart?canceled=1`,
   });
 
   await db.order.update({

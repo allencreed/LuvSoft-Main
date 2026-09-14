@@ -123,10 +123,25 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
   const { searchParams } = new URL(req.url);
   const itemId = searchParams.get("itemId");
   if (!itemId) {
     return NextResponse.json({ error: "itemId required" }, { status: 400 });
+  }
+
+  // Ownership check: the caller may only delete items from their own cart.
+  const item = await db.cartItem.findUnique({
+    where: { id: itemId },
+    include: { cart: true },
+  });
+
+  if (!item || item.cart.userId !== user.id) {
+    return NextResponse.json({ error: "Cart item not found" }, { status: 404 });
   }
 
   await db.cartItem.delete({ where: { id: itemId } });
