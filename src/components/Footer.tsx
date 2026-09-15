@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NewsletterForm } from "@/components/NewsletterForm";
 
 const columns = [
   {
@@ -48,6 +49,12 @@ export function Footer() {
             <p className="mt-4 max-w-[26ch] text-[15px] leading-relaxed text-white/55">
               Quietly luxurious essentials for a softer, slower everyday — made to be kept, not replaced.
             </p>
+            <div className="mt-7 max-w-[340px]">
+              <h4 className="text-[11px] font-medium uppercase tracking-[0.22em] text-body-muted">Join the list</h4>
+              <div className="mt-4">
+                <NewsletterForm source="footer" variant="dark" />
+              </div>
+            </div>
           </div>
 
           {/* Link columns */}

@@ -8,14 +8,44 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String?
-  auth0Id   String   @unique
-  role      String   @default("customer")
+  // Set for users who sign in through Auth0. Null for native accounts
+  // created with email + password via /auth/register.
+  auth0Id   String?   @unique
+  password  Password?
+  sessions  Session[]
+  role      String    @default("customer")
   cart      Cart?
   orders    Order[]
+  createdAt DateTime  @default(now())
+}
+
+/// Native credential sign-in (email + password). Kept separate from User so
+/// an Auth0-linked user could later gain a password without breaking uniques.
+model Password {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // scrypt: N, r, p, salt, hash — all hex-encoded
+  hash      String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Server-side sessions for native accounts (httpOnly cookie holds only a
+/// random selector; the validator half is stored hashed in the database).
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash    String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  lastSeenAt   DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Category {
@@ -90,4 +120,13 @@ model OrderItem {
   product    Product @relation(fields: [productId], references: [id])
   quantity   Int
   priceCents Int
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("footer")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

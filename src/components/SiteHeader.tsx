@@ -52,6 +52,15 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
     return () => window.removeEventListener("keydown", onKey);
   }, [shopOpen]);
 
+  // Lock background scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const transparent = isHome && !scrolled && !open;
 
   const openShop = () => {
@@ -253,6 +262,17 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
         <div className="animate-in fade-in-0 slide-in-from-top-4 fixed inset-0 top-0 z-40 overflow-y-auto bg-canvas duration-300 md:hidden">
           <div className="flex min-h-full flex-col justify-between px-8 pb-10 pt-[88px]">
             <nav className="flex flex-col gap-2" aria-label="Mobile">
+              {/* Search — the desktop icon is hidden on mobile, so the drawer is the entry point */}
+              <Link
+                href="/search"
+                onClick={() => setOpen(false)}
+                className="group flex items-center gap-4 border-b border-hairline py-5"
+              >
+                <Search className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
+                <span className="font-display text-[34px] leading-none text-ink transition-colors group-hover:text-gold-deep">
+                  Search
+                </span>
+              </Link>
               <Link
                 href="/products"
                 onClick={() => setOpen(false)}

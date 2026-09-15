@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { db } from "@/lib/db";
-import { requireUser } from "@/lib/session";
+import { requireStorefrontUser } from "@/lib/session";
 import { stripe } from "@/lib/stripe";
 import { fulfillStripeCheckout } from "@/lib/fulfillment";
 import { formatPrice } from "@/lib/utils";
@@ -18,7 +18,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { paid } = await searchParams;
 
-  const user = await requireUser(`/account/orders/${id}`);
+  const user = await requireStorefrontUser(`/account/orders/${id}`);
 
   let order = await db.order.findUnique({
     where: { id },

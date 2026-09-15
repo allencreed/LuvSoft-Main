@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth0 } from "@/lib/auth0";
 import { db } from "@/lib/db";
+import { getCurrentStorefrontUser } from "@/lib/session";
 
 async function getCart(userId: string) {
   let cart = await db.cart.findUnique({
@@ -19,10 +19,7 @@ async function getCart(userId: string) {
 }
 
 export async function GET(req: NextRequest) {
-  const session = await auth0.getSession(req);
-  if (!session?.user) return NextResponse.json({ cart: null });
-
-  const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
+  const user = await getCurrentStorefrontUser(req);
   if (!user) return NextResponse.json({ cart: null });
 
   const cart = await getCart(user.id);
@@ -30,14 +27,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth0.getSession(req);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
+  const user = await getCurrentStorefrontUser(req);
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { productId, quantity = 1 } = await req.json();
@@ -80,14 +72,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const session = await auth0.getSession(req);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
+  const user = await getCurrentStorefrontUser(req);
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { itemId, quantity } = await req.json();
@@ -118,14 +105,9 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await auth0.getSession(req);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
+  const user = await getCurrentStorefrontUser(req);
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { searchParams } = new URL(req.url);

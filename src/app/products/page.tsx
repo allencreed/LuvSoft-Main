@@ -59,8 +59,8 @@ export default async function ProductsPage({
         </div>
       </section>
 
-      {/* Filter tabs */}
-      <div className="sticky top-[72px] z-30 border-b border-hairline bg-canvas/95 backdrop-blur-md">
+      {/* Filter tabs — horizontal scroll on mobile, non-sticky so the auto-hiding header never overlaps it */}
+      <div className="z-30 border-b border-hairline bg-canvas">
         <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div
             className="mx-auto flex w-max items-center gap-7 px-6 py-4 sm:gap-10"

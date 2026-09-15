@@ -4,6 +4,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { NewsletterModal } from "@/components/NewsletterModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <NewsletterModal />
         <Toaster />
       </body>
     </html>

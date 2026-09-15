@@ -21,7 +21,7 @@ export function CartCheckoutButton() {
     <button
       onClick={handleCheckout}
       disabled={loading}
-      className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-[22px] py-[14px] text-[18px] font-light text-white hover:brightness-110 active:scale-[0.96] transition-all disabled:opacity-50"
+      className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-[22px] py-[14px] text-[16px] font-light text-white hover:brightness-110 active:scale-[0.96] transition-all disabled:opacity-50 sm:text-[18px]"
     >
       {loading ? "Redirecting..." : "Checkout"}
     </button>

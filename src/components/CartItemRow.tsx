@@ -58,31 +58,40 @@ export function CartItemRow({ item }: CartItemRowProps) {
         <Link href={`/products/${item.product.slug}`} className="text-[17px] font-normal text-ink hover:underline line-clamp-1">
           {item.product.name}
         </Link>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-sm text-muted-foreground">Qty:</span>
-          <div className="inline-flex items-center rounded-full border border-hairline">
-            <button
-              type="button"
-              onClick={() => updateQuantity(qty - 1)}
-              className="flex h-6 w-6 items-center justify-center text-ink hover:bg-muted rounded-full transition-colors"
-            >
-              <Minus className="h-3 w-3" />
-            </button>
-            <span className="w-6 text-center text-[13px] font-normal text-ink tabular-nums select-none">
-              {qty}
-            </span>
-            <button
-              type="button"
-              onClick={() => updateQuantity(qty + 1)}
-              className="flex h-6 w-6 items-center justify-center text-ink hover:bg-muted rounded-full transition-colors"
-            >
-              <Plus className="h-3 w-3" />
-            </button>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Qty:</span>
+            <div className="inline-flex items-center rounded-full border border-hairline">
+              <button
+                type="button"
+                onClick={() => updateQuantity(qty - 1)}
+                aria-label="Decrease quantity"
+                className="flex h-8 w-8 items-center justify-center text-ink hover:bg-muted rounded-full transition-colors"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <span className="w-6 text-center text-[13px] font-normal text-ink tabular-nums select-none">
+                {qty}
+              </span>
+              <button
+                type="button"
+                onClick={() => updateQuantity(qty + 1)}
+                aria-label="Increase quantity"
+                className="flex h-8 w-8 items-center justify-center text-ink hover:bg-muted rounded-full transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
+          <p className="text-[17px] font-normal">{formatPrice(item.priceCents * qty)}</p>
         </div>
-        <p className="text-[17px] font-normal mt-1">{formatPrice(item.priceCents * qty)}</p>
       </div>
-      <Button variant="ghost" onClick={handleRemove} className="text-sm">
+      <Button
+        variant="ghost"
+        onClick={handleRemove}
+        aria-label={`Remove ${item.product.name} from cart`}
+        className="text-sm"
+      >
         Remove
       </Button>
     </div>
