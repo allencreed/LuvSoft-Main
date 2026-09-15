@@ -25,21 +25,12 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
   const isHome = pathname === "/";
 
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false); // mobile drawer
   const [shopOpen, setShopOpen] = useState(false); // desktop dropdown
   const shopCloseTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      if (Math.abs(y - lastY) > 6) {
-        setHidden(y > lastY && y > 200);
-        lastY = y;
-      }
-    };
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -77,11 +68,7 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-out ${
-          hidden ? "-translate-y-full" : "translate-y-0"
-        }`}
-      >
+      <header className="fixed inset-x-0 top-0 z-50">
         {/* Announcement strip — home only, collapses on scroll */}
         {isHome && (
           <div
@@ -113,7 +100,7 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
             }`}
           >
             {/* Left nav (desktop) */}
-            <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+            <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
               {/* Shop dropdown */}
               <div className="relative" onMouseEnter={openShop} onMouseLeave={closeShop}>
                 <button
@@ -177,7 +164,7 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`group relative text-[11px] font-medium uppercase tracking-[0.2em] transition-colors ${linkTone}`}
+                  className={`group relative whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.2em] transition-colors ${linkTone}`}
                 >
                   {link.label}
                   <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
@@ -221,14 +208,14 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
               {!user ? (
                 <Link
                   href="/auth/login"
-                  className={`hidden text-[11px] font-medium uppercase tracking-[0.18em] transition-colors md:inline-block ${linkTone}`}
+                  className={`hidden whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.18em] transition-colors lg:inline-block ${linkTone}`}
                 >
                   Sign in
                 </Link>
               ) : (
                 <Link
                   href="/account/orders"
-                  className={`hidden text-[11px] font-medium uppercase tracking-[0.18em] transition-colors md:inline-block ${linkTone}`}
+                  className={`hidden whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.18em] transition-colors lg:inline-block ${linkTone}`}
                 >
                   {user.name?.split(" ")[0] ?? "Account"}
                 </Link>
@@ -237,7 +224,7 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
               {/* Mobile menu toggle */}
               <button
                 onClick={() => setOpen(!open)}
-                className={`flex items-center justify-center transition-colors md:hidden ${
+                className={`flex items-center justify-center transition-colors lg:hidden ${
                   transparent ? "text-white" : "text-ink"
                 }`}
                 aria-label={open ? "Close menu" : "Open menu"}
@@ -259,7 +246,7 @@ export function SiteHeader({ cartCount, user }: { cartCount: number; user: User 
 
       {/* Mobile drawer */}
       {open && (
-        <div className="animate-in fade-in-0 slide-in-from-top-4 fixed inset-0 top-0 z-40 overflow-y-auto bg-canvas duration-300 md:hidden">
+        <div className="animate-in fade-in-0 slide-in-from-top-4 fixed inset-0 top-0 z-40 overflow-y-auto bg-canvas duration-300 lg:hidden">
           <div className="flex min-h-full flex-col justify-between px-8 pb-10 pt-[88px]">
             <nav className="flex flex-col gap-2" aria-label="Mobile">
               {/* Search — the desktop icon is hidden on mobile, so the drawer is the entry point */}

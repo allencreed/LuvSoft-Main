@@ -18,6 +18,9 @@ export function NewsletterModal() {
   const [open, setOpen] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const delayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Once the modal has shown (or been dismissed), the triggers must never
+  // fire again — otherwise every scroll re-opens a closed modal.
+  const triggeredRef = useRef(false);
 
   useEffect(() => {
     let dismissed = false;
@@ -31,11 +34,16 @@ export function NewsletterModal() {
     }
     if (dismissed) return;
 
-    const trigger = () => setOpen(true);
+    const trigger = () => {
+      if (triggeredRef.current) return;
+      triggeredRef.current = true;
+      setOpen(true);
+    };
 
     delayTimer.current = setTimeout(trigger, SHOW_DELAY_MS);
 
     const onScroll = () => {
+      if (triggeredRef.current) return;
       const depth =
         window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       if (depth >= SCROLL_DEPTH) trigger();
