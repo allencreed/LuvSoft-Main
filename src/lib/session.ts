@@ -183,6 +183,31 @@ export async function requireStorefrontUser(returnTo = "/"): Promise<SessionUser
   return user;
 }
 
+/**
+ * Unified admin gate. Returns the signed-in user when they hold the admin
+ * role, otherwise null — works for native AND Auth0 accounts. Admin pages
+ * and admin API routes must use this (never a bare Auth0 session check).
+ */
+export async function getAdminUser(req?: Request): Promise<SessionUser | null> {
+  const user = await getCurrentStorefrontUser(req);
+  return user?.role === "admin" ? user : null;
+}
+
+/**
+ * Page-side admin gate: redirects signed-out visitors to login (preserving
+ * the destination) and renders nothing for signed-in non-admins — callers
+ * decide what a non-admin sees by checking the null return.
+ */
+export async function requireAdminUser(
+  returnTo = "/admin",
+): Promise<SessionUser | null> {
+  const user = await getCurrentStorefrontUser();
+  if (!user) {
+    redirect(`/auth/login?returnTo=${encodeURIComponent(returnTo)}`);
+  }
+  return user.role === "admin" ? user : null;
+}
+
 // ---------------------------------------------------------------------------
 // Shared validation + best-effort login throttling
 // ---------------------------------------------------------------------------

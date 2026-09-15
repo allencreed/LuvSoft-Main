@@ -1,21 +1,16 @@
-import { auth0 } from "@/lib/auth0";
 import Link from "next/link";
-import { db } from "@/lib/db";
+import { requireAdminUser } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth0.getSession();
-  let isAdmin = false;
+  const admin = await requireAdminUser("/admin");
 
-  if (session?.user) {
-    const user = await db.user.findUnique({ where: { auth0Id: session.user.sub } });
-    isAdmin = user?.role === "admin";
-  }
-
-  if (!isAdmin) {
+  if (!admin) {
     return (
       <div className="mx-auto px-6 py-20 text-center" style={{ maxWidth: 980 }}>
         <h1 className="text-[34px] font-semibold leading-[1.47] text-ink">Access Denied</h1>
